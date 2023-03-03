@@ -10,9 +10,9 @@ public class AuthenticationService : IAuthenticationService
     {
         _token = token;
     }
-    public AuthenticationResult Login(string email, string password)
+    public AuthenticationResult Login(string email, string pass)
     {
-        return new AuthenticationResult(Guid.NewGuid(),"firstName", "lastName",email,password);
+        return new AuthenticationResult(Guid.NewGuid(),"firstName", "lastName",email,pass);
     }
 
     public AuthenticationResult Register(string firstName, string lastName, string email, string password)
