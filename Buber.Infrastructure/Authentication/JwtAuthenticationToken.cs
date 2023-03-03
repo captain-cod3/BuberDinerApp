@@ -2,16 +2,24 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Buber.Application.Common.Interfaces.Authentication;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Buber.Infrastructure.Authentication;
 
 public class JwtAuthenticationToken : IJwtAuthenticationToken
 {
+    private readonly JwtSettings _settings;
+
+    public JwtAuthenticationToken(IOptions<JwtSettings> settings)
+    {
+        _settings = settings.Value;
+    }
+
     public string GenerateToken(Guid userId, string firstName, string lastName)
     {
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super-longing-key")),
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Secret)),    ///Using Options pattern to fill out the values
             SecurityAlgorithms.HmacSha256);
 
         var claims = new []{
@@ -22,8 +30,9 @@ public class JwtAuthenticationToken : IJwtAuthenticationToken
         };
 
         var securityToken = new JwtSecurityToken(
-            issuer: "BuberDiner",
-            expires: DateTime.Now.AddDays(1),
+            issuer: _settings.Issuer,
+            audience: _settings.Audience,
+            expires: DateTime.UtcNow.AddMinutes(_settings.ExpirationTimeinMinutes),
             claims : claims,
             signingCredentials: signingCredentials
         );

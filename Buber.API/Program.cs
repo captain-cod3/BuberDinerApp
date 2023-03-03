@@ -3,7 +3,7 @@ using Buber.Application.Services.Authentication;
 using Buber.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddApplication().AddInfrastructure();
+builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 
 // Add services to the container.
 
