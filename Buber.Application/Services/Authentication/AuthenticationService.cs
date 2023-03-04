@@ -26,21 +26,21 @@ public class AuthenticationService : IAuthenticationService
         _userRepo.AddUser(user); 
 
         //create a token
-        var token = _token.GenerateToken(user.Id,user.FirstName,user.LastName);
-        return new AuthenticationResult(user.Id,user.FirstName, user.LastName,user.Email,token);
+        var token = _token.GenerateToken(user);
+        return new AuthenticationResult(user,token);
     }
 
     public AuthenticationResult Login(string email, string password)
-    {   
-        var user = _userRepo.GetuserByEmail(email);
-        if( user is not null)
-        {
-            if(user.Password == password){
-                var token = _token.GenerateToken(user.Id,user.FirstName,user.LastName);
-                return new AuthenticationResult(user.Id,user.FirstName,user.LastName,user.Email,token);
-            }
-        }
+    {  
 
-        return new AuthenticationResult(Guid.NewGuid(),"firstName", "lastName",email,password);
+        if(_userRepo.GetuserByEmail(email) is not User user)
+            throw new Exception("User does not exist");
+
+        if(user.Password != password)
+            throw new Exception("Invalid password");
+
+        var token = _token.GenerateToken(user);
+
+        return new AuthenticationResult(user,token);
     }
 }

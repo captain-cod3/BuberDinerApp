@@ -21,10 +21,10 @@ public class AuthenticationController : ControllerBase{
         var result = _auth.Register(request.FirstName, request.LastName, request.Email, request.Password);
 
         var response = new AuthenticationResponse(
-            result.Id,
-            result.FirstName,
-            result.LastName,
-            result.Email,
+            result.user.Id,
+            result.user.FirstName,
+            result.user.LastName,
+            result.user.Email,
             result.Token
         );
 
@@ -37,10 +37,10 @@ public class AuthenticationController : ControllerBase{
         var result = _auth.Login(request.Email, request.Password);
 
         var response = new AuthenticationResponse(
-            result.Id,
-            result.FirstName,
-            result.LastName,
-            result.Email,
+            result.user.Id,
+            result.user.FirstName,
+            result.user.LastName,
+            result.user.Email,
             result.Token
         );
 

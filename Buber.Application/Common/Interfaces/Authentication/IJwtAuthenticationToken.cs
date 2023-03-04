@@ -1,6 +1,8 @@
+using Buber.Domain.Entities;
+
 namespace Buber.Application.Common.Interfaces.Authentication;
 
 public interface IJwtAuthenticationToken
 {
-    string GenerateToken(Guid userId, string firstName, string lastName);
+    string GenerateToken(User user);
 }
